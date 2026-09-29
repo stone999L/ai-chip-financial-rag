@@ -1,0 +1,72 @@
+name: retrieval-build
+
+on:
+  workflow_run:
+    workflows: ["corpus-build"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  build-retrieval:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      EMBEDDING_MODEL: Qwen/Qwen3-Embedding-0.6B
+      EMBED_BATCH_SIZE: "4"
+      HF_HOME: ${{ github.workspace }}/.hf-cache
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download processed corpus from corpus-build
+        if: ${{ github.event_name == 'workflow_run' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: processed-corpus
+          path: .
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stop manual run without processed corpus
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          test -f data/processed/chunks.jsonl || {
+            echo "Manual run requires data/processed/chunks.jsonl. Run corpus-build first.";
+            exit 1;
+          }
+
+      - name: Install retrieval dependencies
+        run: python -m pip install pandas numpy jieba rank-bm25 sentence-transformers torch tqdm
+
+      - name: Build BM25 and Qwen embedding indexes
+        run: python scripts/build_index.py
+
+      - name: Run the 10 retrieval questions
+        run: python evaluation/evaluate.py
+
+      - name: Print retrieval coverage
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          df = pd.read_csv("evaluation/retrieval_runs.csv")
+          print(df[["question_id", "companies_covered"]].to_string(index=False))
+          print("questions=", len(df))
+          assert len(df) == 10
+          print("RETRIEVAL_BUILD_OK")
+          PY
+
+      - name: Upload retrieval artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-results
+          path: |
+            data/index/bm25.pkl
+            data/index/vectors.npy
+            data/index/chunks.jsonl
+            data/index/embedding_model.txt
+            evaluation/retrieval_runs.csv
+          retention-days: 7
