@@ -12,7 +12,7 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.config import CHUNKS_JSONL, INDEX_DIR, EMBEDDING_MODEL
+from src.config import CHUNKS_JSONL, INDEX_DIR, EMBEDDING_MODEL, EMBED_BATCH_SIZE
 
 
 def load_chunks():
@@ -44,7 +44,7 @@ def main() -> None:
     model = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True)
     vectors = model.encode(
         texts,
-        batch_size=16,
+        batch_size=EMBED_BATCH_SIZE,
         normalize_embeddings=True,
         show_progress_bar=True,
     )
