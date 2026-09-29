@@ -61,4 +61,5 @@ jobs:
             data/processed/pages.jsonl
             data/processed/chunks.jsonl
           retention-days: 7
-\n# retrieval refresh: bge-small\n
+
+# retrieval refresh: bge-small
