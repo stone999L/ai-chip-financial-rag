@@ -7,8 +7,6 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.bm25_retriever import BM25Retriever
-from src.vector_retriever import VectorRetriever
 from src.hybrid_retriever import HybridRetriever
 
 QUESTIONS = ROOT / "evaluation" / "questions.json"
@@ -50,9 +48,9 @@ def coverage(retrieved, required):
 def main():
     questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
 
-    bm25 = BM25Retriever()
-    vector = VectorRetriever()
     hybrid = HybridRetriever()
+    bm25 = hybrid.bm25
+    vector = hybrid.vector
 
     all_companies = []
     for chunk in bm25.chunks:
