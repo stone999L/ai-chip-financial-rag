@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 import json
 import re
 import sys
@@ -41,7 +42,19 @@ def table_to_text(table) -> str:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--company", action="append", help="仅解析指定公司，可重复传入")
+    parser.add_argument("--max-pages", type=int, default=0, help="每份报告最多解析页数；0 表示全部")
+    args = parser.parse_args()
+
     manifest = pd.read_csv(MANIFEST_PATH, dtype={"stock_code": str})
+    if args.company:
+        wanted = set(args.company)
+        manifest = manifest[manifest["company_name"].isin(wanted)]
+        missing_names = wanted - set(manifest["company_name"])
+        if missing_names:
+            raise SystemExit("清单中不存在公司：" + "、".join(sorted(missing_names)))
+
     PAGES_JSONL.parent.mkdir(parents=True, exist_ok=True)
 
     with PAGES_JSONL.open("w", encoding="utf-8") as out:
@@ -55,10 +68,14 @@ def main() -> None:
                 continue
 
             doc = fitz.open(pdf_path)
+            page_count = len(doc)
+            if args.max_pages and args.max_pages > 0:
+                page_count = min(page_count, args.max_pages)
+
             current_section = "未识别章节"
 
             with pdfplumber.open(pdf_path) as plumber_pdf:
-                for idx in tqdm(range(len(doc)), desc=f"Parsing {company}", leave=False):
+                for idx in tqdm(range(page_count), desc=f"Parsing {company}", leave=False):
                     page_no = idx + 1
                     text = normalize_text(doc[idx].get_text("text"))
                     current_section = extract_section(text, current_section)
@@ -86,6 +103,8 @@ def main() -> None:
                         "disclosure_source": row.get("source", ""),
                     }
                     out.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+            doc.close()
 
     print(f"完成。逐页解析结果：{PAGES_JSONL}")
 
