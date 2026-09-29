@@ -1,0 +1,22 @@
+name: source-check
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "data/reports_manifest.csv"
+      - "scripts/verify_report_files.py"
+      - ".github/workflows/source-check.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install pandas requests PyMuPDF
+      - name: Verify all registered full-report PDFs
+        run: python scripts/verify_report_files.py
