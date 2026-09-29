@@ -12,6 +12,7 @@ PAGES_JSONL = PROCESSED_DIR / "pages.jsonl"
 CHUNKS_JSONL = PROCESSED_DIR / "chunks.jsonl"
 
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-0.6B")
+EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "4"))
 BM25_TOP_K = int(os.getenv("BM25_TOP_K", "10"))
 VECTOR_TOP_K = int(os.getenv("VECTOR_TOP_K", "10"))
 FINAL_TOP_K = int(os.getenv("FINAL_TOP_K", "8"))
