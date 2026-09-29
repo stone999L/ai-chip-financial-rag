@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
-      EMBEDDING_MODEL: Qwen/Qwen3-Embedding-0.6B
-      EMBED_BATCH_SIZE: "4"
+      EMBEDDING_MODEL: BAAI/bge-small-zh-v1.5
+      EMBED_BATCH_SIZE: "32"
       HF_HOME: ${{ github.workspace }}/.hf-cache
     steps:
       - uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
       - name: Install retrieval dependencies
         run: python -m pip install pandas numpy jieba rank-bm25 sentence-transformers tqdm
 
-      - name: Build BM25 and Qwen embedding indexes
+      - name: Build BM25 and BGE embedding indexes
         run: python scripts/build_index.py
 
       - name: Run the 10 retrieval questions
