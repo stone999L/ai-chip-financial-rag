@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 import sys
 
 import pandas as pd
@@ -12,7 +13,18 @@ from src.config import MANIFEST_PATH, RAW_DIR
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--company", action="append", help="仅下载指定公司，可重复传入")
+    args = parser.parse_args()
+
     manifest = pd.read_csv(MANIFEST_PATH, dtype={"stock_code": str})
+    if args.company:
+        wanted = set(args.company)
+        manifest = manifest[manifest["company_name"].isin(wanted)]
+        missing_names = wanted - set(manifest["company_name"])
+        if missing_names:
+            raise SystemExit("清单中不存在公司：" + "、".join(sorted(missing_names)))
+
     session = requests.Session()
     session.headers.update({"User-Agent": "Mozilla/5.0 financial-rag-course-project"})
 
