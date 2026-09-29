@@ -96,3 +96,55 @@ ai-chip-financial-rag/
 - [ ] 完成问答页面
 - [ ] 跑真实测试并填写实验结果
 - [ ] 输出页面截图与一页结论
+
+
+## 本地运行
+
+建议 Python 3.11。
+
+```bash
+git clone https://github.com/stone999L/ai-chip-financial-rag.git
+cd ai-chip-financial-rag
+
+python -m venv .venv
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+copy .env.example .env
+```
+
+先检查样本清单：
+
+```bash
+python scripts/validate_manifest.py
+```
+
+完整流水线：
+
+```bash
+python scripts/run_pipeline.py
+```
+
+也可以分步运行：
+
+```bash
+python scripts/download_reports.py
+python scripts/parse_reports.py
+python scripts/chunk_documents.py
+python scripts/build_index.py
+```
+
+建立索引后启动页面：
+
+```bash
+streamlit run app/app.py
+```
+
+运行 10 道题的检索记录：
+
+```bash
+python evaluation/evaluate.py
+```
+
+> 未配置 LLM API 时，页面仍可运行“证据检索模式”，直接展示 BM25 + 向量混合召回结果；这样可以先完成课程要求中的召回分析，再决定是否接入回答模型。
