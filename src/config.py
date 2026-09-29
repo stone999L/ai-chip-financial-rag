@@ -11,8 +11,8 @@ MANIFEST_PATH = DATA_DIR / "reports_manifest.csv"
 PAGES_JSONL = PROCESSED_DIR / "pages.jsonl"
 CHUNKS_JSONL = PROCESSED_DIR / "chunks.jsonl"
 
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-0.6B")
-EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "4"))
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-zh-v1.5")
+EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "32"))
 BM25_TOP_K = int(os.getenv("BM25_TOP_K", "10"))
 VECTOR_TOP_K = int(os.getenv("VECTOR_TOP_K", "10"))
 FINAL_TOP_K = int(os.getenv("FINAL_TOP_K", "8"))
