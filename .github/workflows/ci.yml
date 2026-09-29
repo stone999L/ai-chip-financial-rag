@@ -24,3 +24,7 @@ jobs:
       - name: Discover pending CNINFO report URLs
         continue-on-error: true
         run: python scripts/discover_cninfo.py --only-pending
+
+      - name: Scrape public disclosure pages for PDF links
+        continue-on-error: true
+        run: python scripts/scrape_disclosure_links.py
