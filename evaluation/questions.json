@@ -1,0 +1,62 @@
+[
+  {
+    "id": "Q1",
+    "question": "寒武纪2026年上半年营业收入及同比变化是多少？",
+    "type": "single_company_numeric",
+    "companies": ["寒武纪"]
+  },
+  {
+    "id": "Q2",
+    "question": "寒武纪在报告期内主要智能芯片产品及应用场景有哪些？",
+    "type": "single_company_semantic",
+    "companies": ["寒武纪"]
+  },
+  {
+    "id": "Q3",
+    "question": "海光信息的CPU与DCU分别主要面向哪些计算场景？",
+    "type": "single_company_semantic",
+    "companies": ["海光信息"]
+  },
+  {
+    "id": "Q4",
+    "question": "龙芯中科在自主处理器生态建设方面有哪些进展？",
+    "type": "single_company_semantic",
+    "companies": ["龙芯中科"]
+  },
+  {
+    "id": "Q5",
+    "question": "景嘉微在半年报中如何描述GPU相关产品及其应用方向？",
+    "type": "single_company_semantic",
+    "companies": ["景嘉微"]
+  },
+  {
+    "id": "Q6",
+    "question": "芯原股份的芯片IP和定制芯片业务模式与直接销售标准芯片有何不同？",
+    "type": "single_company_business_model",
+    "companies": ["芯原股份"]
+  },
+  {
+    "id": "Q7",
+    "question": "瑞芯微与全志科技在端侧智能计算方面分别有哪些布局？",
+    "type": "two_company_comparison",
+    "companies": ["瑞芯微", "全志科技"]
+  },
+  {
+    "id": "Q8",
+    "question": "样本公司中哪些公司披露了研发投入或研发费用的明显变化，并解释了主要原因？",
+    "type": "multi_company_numeric_semantic",
+    "companies": "all"
+  },
+  {
+    "id": "Q9",
+    "question": "这10家公司在国产计算与智能芯片领域形成了哪些主要技术路线？请按云端算力、CPU/GPU、端侧SoC、IP/定制与FPGA等方向归纳，并指出代表公司。",
+    "type": "cross_company_global",
+    "companies": "all"
+  },
+  {
+    "id": "Q10",
+    "question": "这10家公司2026年上半年共同面临哪些技术、市场和供应链风险，各家公司采取了哪些应对措施？",
+    "type": "cross_company_global",
+    "companies": "all"
+  }
+]
