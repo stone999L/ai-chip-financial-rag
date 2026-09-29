@@ -40,6 +40,8 @@ if st.button("检索并回答", type="primary"):
                 f"[{i}] {c['company_name']} · {c['section']} · 第{c['page']}页 · {c['content_type']}"
             ):
                 st.write(c["content"])
+                if c.get("report_url"):
+                    st.markdown(f"[打开报告原文 PDF]({c['report_url']})")
                 st.json({
                     "chunk_id": c["chunk_id"],
                     "company": c["company_name"],
@@ -47,6 +49,8 @@ if st.button("检索并回答", type="primary"):
                     "report_period": c["report_period"],
                     "section": c["section"],
                     "page": c["page"],
+                    "disclosure_source": c.get("disclosure_source", ""),
+                    "report_url": c.get("report_url", ""),
                     "routes": item["routes"],
                     "rrf_score": item["rrf_score"],
                 })
