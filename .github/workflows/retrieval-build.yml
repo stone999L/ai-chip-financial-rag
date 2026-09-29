@@ -31,6 +31,22 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Normalize downloaded corpus paths
+        if: ${{ github.event_name == 'workflow_run' }}
+        run: |
+          mkdir -p data/processed
+          if [ ! -f data/processed/chunks.jsonl ]; then
+            CHUNKS="$(find . -type f -name chunks.jsonl -print -quit)"
+            PAGES="$(find . -type f -name pages.jsonl -print -quit)"
+            echo "artifact chunks path: $CHUNKS"
+            echo "artifact pages path: $PAGES"
+            test -n "$CHUNKS"
+            cp "$CHUNKS" data/processed/chunks.jsonl
+            if [ -n "$PAGES" ]; then cp "$PAGES" data/processed/pages.jsonl; fi
+          fi
+          test -f data/processed/chunks.jsonl
+          wc -l data/processed/chunks.jsonl
+
       - name: Stop manual run without processed corpus
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
