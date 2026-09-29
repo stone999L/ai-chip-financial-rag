@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+data/raw/*.pdf
+data/processed/*.jsonl
+data/index/
+*.npy
+*.pkl
+.streamlit/secrets.toml
