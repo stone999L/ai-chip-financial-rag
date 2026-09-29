@@ -53,7 +53,7 @@ jobs:
           python - <<'PY'
           import pandas as pd
           df = pd.read_csv("evaluation/retrieval_runs.csv")
-          print(df[["question_id", "companies_covered"]].to_string(index=False))
+          print(df[["question_id", "bm25_company_coverage", "vector_company_coverage", "hybrid_company_coverage", "hybrid_companies"]].to_string(index=False))
           print("questions=", len(df))
           assert len(df) == 10
           print("RETRIEVAL_BUILD_OK")
