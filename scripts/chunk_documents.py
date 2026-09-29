@@ -45,6 +45,8 @@ def main() -> None:
                 "section": page["section"],
                 "page": page["page"],
                 "source_file": page["source_file"],
+                "report_url": page.get("report_url", ""),
+                "disclosure_source": page.get("disclosure_source", ""),
             }
 
             for i, chunk in enumerate(split_text(page["text"])):
