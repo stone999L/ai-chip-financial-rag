@@ -23,4 +23,4 @@ jobs:
 
       - name: Discover pending CNINFO report URLs
         continue-on-error: true
-        run: python scripts/discover_cninfo.py --only-pending
+        run: python scripts/discover_cninfo.py
