@@ -82,6 +82,8 @@ def main() -> None:
                         "text": text,
                         "tables": tables_text,
                         "source_file": pdf_path.name,
+                        "report_url": row.get("report_url", ""),
+                        "disclosure_source": row.get("source", ""),
                     }
                     out.write(json.dumps(record, ensure_ascii=False) + "\n")
 
