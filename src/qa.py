@@ -9,6 +9,7 @@ def format_evidence(results):
         c = item["chunk"]
         blocks.append(
             f"[{i}] {c['company_name']} | {c['report_period']} | {c['section']} | 第{c['page']}页 | {c['content_type']}\n"
+            f"来源：{c.get('report_url', '')}\n"
             f"{c['content']}"
         )
     return "\n\n".join(blocks)
