@@ -19,7 +19,11 @@ def main() -> None:
         raise SystemExit("没有已核验报告可检查。")
 
     s = requests.Session()
-    s.headers.update({"User-Agent": "Mozilla/5.0 financial-rag-course-project"})
+    s.headers.update({
+        "User-Agent": "Mozilla/5.0 financial-rag-course-project",
+        "Referer": "https://www.sse.com.cn/",
+        "Accept": "application/pdf,text/html;q=0.9,*/*;q=0.8",
+    })
 
     errors = []
     for row in df.to_dict("records"):
@@ -31,7 +35,9 @@ def main() -> None:
             r.raise_for_status()
             data = r.content
             if not data.startswith(b"%PDF"):
-                raise RuntimeError("响应不是 PDF")
+                ctype = r.headers.get("content-type", "")
+                prefix = data[:80].decode("utf-8", errors="replace")
+                raise RuntimeError(f"响应不是 PDF; status={r.status_code}; content-type={ctype}; prefix={prefix!r}")
             if len(data) < 50_000:
                 raise RuntimeError(f"PDF 过小: {len(data)} bytes")
 
