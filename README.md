@@ -92,7 +92,7 @@ ai-chip-financial-rag/
 - [x] 确定 10 道测试题框架
 - [x] 核验并登记 10 份 2026 年半年度报告全文来源（source-check：10/10 下载及身份校验通过）
 - [x] 下载与解析全部 PDF（10 份共 1,730 页；生成 5,073 个知识块，其中正文 2,367、表格 2,706）
-- [ ] 建立 BM25 与向量索引（retrieval-build 正在用 Qwen3-Embedding-0.6B 构建并跑 10 道测试题）
+- [ ] 建立 BM25 与向量索引（GitHub CPU 改用 BAAI/bge-small-zh-v1.5；Qwen3-Embedding-0.6B 保留为 GPU 可选增强模型）
 - [ ] 完成问答页面
 - [ ] 跑真实测试并填写实验结果
 - [ ] 输出页面截图与一页结论
@@ -162,3 +162,10 @@ GitHub Actions 的全量 `corpus-build` 已真实跑通：
 - 所有 10 家公司均被成功解析
 - 原始 PDF 不提交到仓库，由 manifest 自动下载；处理结果作为 CI artifact 留存
 
+
+
+## Embedding 模型选择说明
+
+GitHub Actions 的普通 CPU runner 实测运行 Qwen3-Embedding-0.6B 时，batch_size=4 的单批耗时约 4 分钟，1269 批预计需要 80 小时以上，不适合作为课程作业的可复现实验环境。因此 GitHub 云端正式实验默认改用 `BAAI/bge-small-zh-v1.5`，并把 batch_size 提高到 32。
+
+`Qwen/Qwen3-Embedding-0.6B` 仍保留为 GPU 机器上的可选增强模型。检索框架、BM25、RRF 混合召回和评价题目均保持不变。
