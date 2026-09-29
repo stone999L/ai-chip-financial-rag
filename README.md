@@ -13,6 +13,25 @@
 - 记录召回结果、回答正确性与错误原因
 - 最终交付 GitHub 代码仓库、系统页面截图与一页实验结论
 
+## 作业要求对应表
+
+| PPT 明确要求 | 本项目完成情况 | 对应位置 |
+|---|---|---|
+| 至少 10 家公司 | ✅ 10 家 | `data/reports_manifest.csv` |
+| 完整年报/半年报 | ✅ 10 份 2026H1 半年报 | `data/reports_manifest.csv`、`docs/data_sources.md` |
+| 正文提取 | ✅ 已完成 | `scripts/parse_reports.py` |
+| 表格恢复行列 | ✅ 已完成并单独切块 | `scripts/parse_reports.py`、`scripts/chunk_documents.py` |
+| 公司/章节/页码元数据 | ✅ 已保留 | `data/processed/` 生成逻辑、`scripts/chunk_documents.py` |
+| 向量索引 | ✅ BGE-small，512 维 | `scripts/build_index.py` |
+| BM25 索引 | ✅ 已完成 | `src/bm25_retriever.py` |
+| 查询页面 + 来源引用 | ✅ Streamlit 页面，可回链 PDF | `app/app.py` |
+| 10 道测试题 | ✅ 10 道 | `evaluation/questions.json` |
+| 至少 2 道跨公司全景题 | ✅ Q9、Q10 | `evaluation/questions.json` |
+| 记录召回块 | ✅ BM25/向量/混合均记录 | `evaluation/retrieval_runs.csv` |
+| 正确性与错误原因 | ✅ 已人工复核 | `evaluation/results.csv` |
+| 页面截图 | ✅ PNG + SVG | `screenshots/` |
+| 一页结论 | ✅ 已完成 | `conclusion/one_page_summary.md` |
+
 ## 样本公司
 
 1. 寒武纪（688256）
@@ -188,7 +207,8 @@ GitHub Actions 的普通 CPU runner 实测运行 Qwen3-Embedding-0.6B 时，batc
 - `evaluation/retrieval_runs.csv`：10 道题的 BM25 / 向量 / 混合真实召回记录；
 - `evaluation/results.csv`：人工复核后的正确性、证据充分性和错误类型；
 - `evaluation/reference_answers.md`：人工参考答案与证据要求；
+- `docs/qa_demo.md`：10 道题的 Q&A 演示与证据充分性说明；
 - `docs/experiment_results.md`：完整实验结果与错误分析；
 - `conclusion/one_page_summary.md`：一页实验结论；
-- `screenshots/query_demo_q3.svg`：典型成功案例静态结果页；
-- `screenshots/query_demo_q9.svg`：跨公司全景题失败案例静态结果页。
+- `screenshots/query_demo_q3.png`：典型成功案例 PNG 结果页；
+- `screenshots/query_demo_q9.png`：跨公司全景题失败案例 PNG 结果页。
