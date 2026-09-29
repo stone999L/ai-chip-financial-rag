@@ -26,7 +26,11 @@ def main() -> None:
             raise SystemExit("清单中不存在公司：" + "、".join(sorted(missing_names)))
 
     session = requests.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0 financial-rag-course-project"})
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0 financial-rag-course-project",
+        "Referer": "https://www.sse.com.cn/",
+        "Accept": "application/pdf,text/html;q=0.9,*/*;q=0.8",
+    })
 
     downloaded = 0
     skipped = []
