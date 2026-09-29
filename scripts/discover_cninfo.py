@@ -12,22 +12,79 @@ sys.path.insert(0, str(ROOT))
 
 from src.config import MANIFEST_PATH
 
-API = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+ANNOUNCEMENT_API = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+TOP_SEARCH_API = "https://www.cninfo.com.cn/new/information/topSearch/query"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://www.cninfo.com.cn/",
+    "X-Requested-With": "XMLHttpRequest",
+}
 
 
-def query_cninfo(code: str):
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Referer": "https://www.cninfo.com.cn/",
-        "X-Requested-With": "XMLHttpRequest",
-    }
+def fallback_org_id(code: str) -> str:
+    if code.startswith("6"):
+        return f"gssh0{code}"
+    if code.startswith(("8", "4")):
+        return f"gsbj0{code}"
+    return f"gssz0{code}"
+
+
+def resolve_org_id(session: requests.Session, code: str) -> str:
+    """Resolve CNINFO orgId; fall back to the stable exchange-code pattern."""
+    try:
+        r = session.post(
+            TOP_SEARCH_API,
+            headers=HEADERS,
+            data={"keyWord": code, "maxNum": 10},
+            timeout=30,
+        )
+        r.raise_for_status()
+        payload = r.json()
+
+        # CNINFO has returned both list and dict-shaped payloads over time.
+        candidates = payload if isinstance(payload, list) else (
+            payload.get("keyBoardList")
+            or payload.get("data")
+            or payload.get("result")
+            or []
+        )
+        if isinstance(candidates, dict):
+            candidates = candidates.get("list") or candidates.get("items") or []
+
+        for item in candidates or []:
+            sec_code = str(
+                item.get("code")
+                or item.get("secCode")
+                or item.get("stockCode")
+                or ""
+            )
+            org_id = str(
+                item.get("orgId")
+                or item.get("orgid")
+                or item.get("orgID")
+                or ""
+            )
+            if sec_code == code and org_id:
+                return org_id
+    except Exception as e:
+        print(f"[orgid-warning] {code}: {e}")
+
+    return fallback_org_id(code)
+
+
+def query_cninfo(session: requests.Session, code: str, exchange: str):
+    org_id = resolve_org_id(session, code)
+    column = "szse" if exchange == "SZSE" else "sse"
+    plate = "sz" if exchange == "SZSE" else "sh"
+
     data = {
         "pageNum": 1,
         "pageSize": 50,
-        "column": "szse",
+        "column": column,
         "tabName": "fulltext",
-        "plate": "sz",
-        "stock": code,
+        "plate": plate,
+        "stock": f"{code},{org_id}",
         "searchkey": "2026年半年度报告",
         "secid": "",
         "category": "",
@@ -37,9 +94,13 @@ def query_cninfo(code: str):
         "sortType": "",
         "isHLtitle": "true",
     }
-    r = requests.post(API, headers=headers, data=data, timeout=30)
+    r = session.post(ANNOUNCEMENT_API, headers=HEADERS, data=data, timeout=30)
     r.raise_for_status()
     payload = r.json()
+    print(
+        f"[query] code={code} exchange={exchange} orgId={org_id} "
+        f"total={payload.get('totalAnnouncement', 'n/a')}"
+    )
     return payload.get("announcements") or []
 
 
@@ -82,14 +143,16 @@ def main():
         print("没有待发现链接的公司。")
         return
 
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     for row in df.to_dict("records"):
         code = str(row["stock_code"])
         company = row["company_name"]
-        if row["exchange"] != "SZSE":
-            print(f"[skip] {company} {code}: 当前发现脚本只处理 SZSE/CNINFO。")
-            continue
+        exchange = row["exchange"]
+
         try:
-            items = query_cninfo(code)
+            items = query_cninfo(session, code, exchange)
             candidates = pick_full_report(items, code)
         except Exception as e:
             print(f"[error] {company} {code}: {e}")
