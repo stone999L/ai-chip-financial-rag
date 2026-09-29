@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f7f9fc"/>
+  <rect x="55" y="45" width="1090" height="810" rx="18" fill="white" stroke="#dfe5ee"/>
+  <text x="90" y="105" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#17233d">国产算力与智能芯片财报问答知识库</text>
+  <text x="90" y="148" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#667085">真实检索结果快照 · Q3 · 2026H1</text>
+  <rect x="90" y="185" width="1020" height="92" rx="12" fill="#f1f5fb"/>
+  <text x="115" y="222" font-family="Microsoft YaHei, sans-serif" font-size="18" fill="#475467">问题</text>
+  <text x="115" y="257" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="600" fill="#101828">海光信息的 CPU 与 DCU 分别主要面向哪些计算场景？</text>
+  <text x="90" y="330" font-family="Microsoft YaHei, sans-serif" font-size="22" font-weight="700" fill="#101828">公司覆盖率</text>
+  <rect x="90" y="355" width="310" height="112" rx="12" fill="#eef8f2"/><text x="115" y="394" font-family="Microsoft YaHei, sans-serif" font-size="17" fill="#347455">BM25</text><text x="115" y="444" font-family="Arial" font-size="38" font-weight="700" fill="#157347">100%</text>
+  <rect x="445" y="355" width="310" height="112" rx="12" fill="#eef8f2"/><text x="470" y="394" font-family="Microsoft YaHei, sans-serif" font-size="17" fill="#347455">向量检索</text><text x="470" y="444" font-family="Arial" font-size="38" font-weight="700" fill="#157347">100%</text>
+  <rect x="800" y="355" width="310" height="112" rx="12" fill="#eef8f2"/><text x="825" y="394" font-family="Microsoft YaHei, sans-serif" font-size="17" fill="#347455">RRF 混合</text><text x="825" y="444" font-family="Arial" font-size="38" font-weight="700" fill="#157347">100%</text>
+  <rect x="90" y="505" width="1020" height="70" rx="12" fill="#eaf7ee"/><text x="115" y="548" font-family="Microsoft YaHei, sans-serif" font-size="22" font-weight="700" fill="#17663a">人工复核：证据充分 ✓</text>
+  <text x="90" y="630" font-family="Microsoft YaHei, sans-serif" font-size="22" font-weight="700" fill="#101828">混合检索核心证据</text>
+  <text x="105" y="680" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#344054">1. 海光信息 · 第15页 · CPU：复杂逻辑计算、多任务调度等通用处理场景</text>
+  <text x="105" y="720" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#344054">2. 海光信息 · 第15页 · DCU：GPGPU 并行计算、科学计算、AI 训练与推理</text>
+  <text x="105" y="760" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#344054">3. 海光信息 · 第18页 / 第19页 · 行业部署与产品应用补充证据</text>
+  <line x1="90" y1="803" x2="1110" y2="803" stroke="#e4e7ec"/>
+  <text x="90" y="833" font-family="Microsoft YaHei, sans-serif" font-size="15" fill="#98a2b3">数据来源：evaluation/retrieval_runs.csv · GitHub Actions retrieval-build 成功运行</text>
+</svg>
